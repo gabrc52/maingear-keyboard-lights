@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maingear_keyboard_lights/models/light_control.dart';
-import 'package:maingear_keyboard_lights/screens/example.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,13 +14,6 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(
-              child: const Text('Open example'),
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const MyHome()));
-              },
-            ),
             ElevatedButton(
               child: const Text('Test button'),
               onPressed: () async {
