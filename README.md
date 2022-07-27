@@ -1,16 +1,14 @@
 # maingear_keyboard_lights
 
-A new Flutter project.
+This desktop app lets you control Integrated Technology Express keyboard lights, specifically ITE 8291 V0.2.
 
-## Getting Started
+Tested with the Maingear Vector Pro. Should work on the Avell A52 too, as the Python script this is based on is for that machine.
 
-This project is a starting point for a Flutter application.
+## Credits
 
-A few resources to get you started if this is your first Flutter project:
+* https://github.com/petryx/avell-a52-lights
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Recursive credits:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* https://github.com/rodgomesc/avell-unofficial-control-center
+* https://github.com/kirainmoe/tongfang-utility
