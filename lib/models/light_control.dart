@@ -89,6 +89,20 @@ class LightControl {
         [0x08, 0x02, 0x01, 0x05, brightnessInt, 0x08, 0x00, save ? 1 : 0]);
   }
 
+  static Future<void> setColor(int index, Color color,
+      {bool save = true}) async {
+    await _sendCommand([
+      0x14,
+      0x00,
+      index + 1,
+      color.red,
+      color.green,
+      color.blue,
+      0x00,
+      save ? 1 : 0
+    ]);
+  }
+
   static Future<void> setColors(List<Color> colors, {bool save = true}) async {
     /// single color is just a hack for multi color 4 times repeated
     if (colors.length == 1) {
@@ -96,16 +110,7 @@ class LightControl {
     }
     for (int i = 0; i < colors.length; i++) {
       var color = colors[i];
-      await _sendCommand([
-        0x14,
-        0x00,
-        i + 1,
-        color.red,
-        color.green,
-        color.blue,
-        0x00,
-        save ? 1 : 0
-      ]);
+      await setColor(i, color, save: save);
     }
   }
 
