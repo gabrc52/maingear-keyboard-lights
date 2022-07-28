@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maingear_keyboard_lights/widgets/brightness_control.dart';
 import 'package:maingear_keyboard_lights/widgets/colors_selector.dart';
 import 'package:maingear_keyboard_lights/widgets/navigation_bar.dart';
+import 'package:maingear_keyboard_lights/widgets/speed_control.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,7 +36,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     launchUrl(Uri.parse(githubRepo));
                   },
-                  icon: const Icon(FontAwesomeIcons.github),
+                  icon: const FaIcon(FontAwesomeIcons.github),
                   label: const Text('View GitHub repo'),
                 ),
               ],
@@ -48,6 +49,8 @@ class HomePage extends StatelessWidget {
           const AppNavigationBar(),
           const Divider(),
           const BrightnessControl(),
+          const Divider(),
+          const SpeedControl(),
           const Divider(),
           Consumer<AppState>(
             builder: (context, state, _) => ColorsSelector(

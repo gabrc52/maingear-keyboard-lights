@@ -52,7 +52,12 @@ class AppState extends ChangeNotifier {
   }
 
   /// TODO: implement changing speed
-  int speed = 7;
+  int get speed => box.get('speed', defaultValue: 7);
+  set speed(int val) {
+    box.put('speed', val);
+    notifyListeners();
+    applyKeyboardMode();
+  }
 
   /// TODO: implement changing direction
   int direction = 1;

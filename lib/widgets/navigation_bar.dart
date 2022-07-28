@@ -35,7 +35,7 @@ class AppNavigationBar extends StatelessWidget {
             label: 'Wave',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.hurricane),
+            icon: FaIcon(FontAwesomeIcons.hurricane),
             label: 'Breathing',
           ),
           BottomNavigationBarItem(
@@ -43,7 +43,7 @@ class AppNavigationBar extends StatelessWidget {
             label: 'Flash',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.mix),
+            icon: FaIcon(FontAwesomeIcons.mix),
             label: 'Mix',
           ),
         ],

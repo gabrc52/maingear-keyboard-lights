@@ -49,6 +49,8 @@ class KeyboardBrightness {
   static const b2 = 0x16;
   static const b3 = 0x24;
   static const b4 = 0x32;
+  static const min = 0;
+  static const max = 50;
 }
 
 class Directions {
@@ -60,8 +62,6 @@ class Directions {
 }
 
 class Speed {
-  static const s1 = 0x07;
-  static const s2 = 0x05;
-  static const s3 = 0x03;
-  static const s4 = 0x01;
+  static const min = 1;
+  static const max = 10;
 }

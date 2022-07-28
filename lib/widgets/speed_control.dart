@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:maingear_keyboard_lights/models/app_state.dart';
 import 'package:maingear_keyboard_lights/models/constants.dart';
 import 'package:provider/provider.dart';
 
-class BrightnessControl extends StatelessWidget {
-  const BrightnessControl({
+// Basically copy pasted from brightness_control.dart
+
+class SpeedControl extends StatelessWidget {
+  const SpeedControl({
     Key? key,
   }) : super(key: key);
 
@@ -20,18 +24,24 @@ class BrightnessControl extends StatelessWidget {
           children: [
             const SizedBox(
               width: 128,
-              child: Text('Brightness:'),
+              child: Text('Speed:'),
             ),
-            const Icon(Icons.brightness_low),
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(pi),
+              child: const Icon(Icons.speed),
+            ),
             Expanded(
               child: Slider(
-                value: state.brightness,
-                onChanged: (val) => state.brightness = val,
-                min: KeyboardBrightness.min.toDouble(),
-                max: KeyboardBrightness.max.toDouble(),
+                divisions: 9,
+                label: '${state.speed}',
+                value: state.speed.toDouble(),
+                onChanged: (val) => state.speed = val.toInt(),
+                min: Speed.min.toDouble(),
+                max: Speed.max.toDouble(),
               ),
             ),
-            const Icon(Icons.brightness_high),
+            const Icon(Icons.speed),
           ],
         ),
       ),

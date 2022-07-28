@@ -110,12 +110,15 @@ class KeyboardLightControl {
       required int speed,
       required num brightness,
       required int direction}) async {
-    int brightnessInt = brightness.round().toInt();
+    int brightnessInt = brightness.round();
+    // we're substracting because low = slow and high = fast
+    // speed of 0 means it doesn't move which is not what we want so we add 1
+    int speedInt = Speed.max - speed + 1;
     await _sendCommand([
       0x08,
       0x02,
       modeNumber,
-      speed,
+      speedInt,
       brightnessInt,
       0x08,
       direction,
