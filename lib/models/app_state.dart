@@ -8,6 +8,7 @@ class AppState extends ChangeNotifier {
   final box = Hive.box('rgb-kbd-config');
 
   Future<void> applyKeyboardMode() async {
+    LightControl.setColors(colors);
     switch (mode) {
       case KeyboardMode.singleColor:
       case KeyboardMode.multiColor:
