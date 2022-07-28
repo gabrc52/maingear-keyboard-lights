@@ -12,11 +12,13 @@ class UsbConfig {
   static const wIndex = 1;
 }
 
+const githubRepo = 'https://github.com/gabrc52/maingear-keyboard-lights/';
+
 final usbDevice = UsbDevice(
   vendorId: UsbConfig.vendorId,
   productId: UsbConfig.productId,
 
-  /// TODO: These two other parameters weren't listed in the original script
+  /// These two other parameters weren't listed in the original script
   /// I'm not sure what they are, and I'm not sure if they vary.
   identifier: '4',
   configurationCount: 1,
@@ -41,7 +43,6 @@ class MaingearColors {
   static const orange = Color(0xffff8000);
 }
 
-/// TODO: Not sure if this will be needed as maybe I'll put a slider instead
 class KeyboardBrightness {
   static const b0 = 0x00;
   static const b1 = 0x08;

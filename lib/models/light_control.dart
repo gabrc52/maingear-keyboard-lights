@@ -5,13 +5,15 @@ import 'dart:typed_data';
 import 'package:ffi/ffi.dart' as ffi;
 import 'package:flutter/cupertino.dart';
 import 'package:maingear_keyboard_lights/models/constants.dart';
-import 'package:quick_usb/quick_usb.dart';
 import 'package:libusb/libusb64.dart';
 import 'package:flutter/material.dart';
 
-class KeyboardLightControl extends ChangeNotifier {
+/// This class lets you control the keyboard lights - static methods only
+class KeyboardLightControl {
+  KeyboardLightControl._();
+
   /// From quick_usb_desktop.dart
-  Libusb _getLibusb() {
+  static Libusb _getLibusb() {
     if (Platform.isLinux) {
       // return Libusb(DynamicLibrary.open('/usr/lib/libusb-1.0.so')); // This gives a segfault
       return Libusb(DynamicLibrary.open(
@@ -25,7 +27,10 @@ class KeyboardLightControl extends ChangeNotifier {
   }
 
   // I swear the actual C code looks simpler than dart:ffi code - I've written it
-  Future<void> sendCommands(List<List<int>> commands) async {
+  static Future<void> _sendCommands(List<List<int>> commands) async {
+    // TODO: it would be best to extract initialization and deinitialization?
+    // Libusb can still be static
+
     final libusb = _getLibusb();
 
     /// Init libusb
@@ -59,7 +64,8 @@ class KeyboardLightControl extends ChangeNotifier {
         0, // unlimited timeout
       );
 
-      assert(result == command.length, 'Failed to send command to keyboard');
+      assert(result == command.length,
+          'Failed to send command to keyboard: $result');
     }
 
     /// Close device and exit libusb
@@ -67,9 +73,97 @@ class KeyboardLightControl extends ChangeNotifier {
     libusb.libusb_exit(nullptr);
   }
 
-  Future<dynamic> test() async {
-    return await sendCommands([
-      [8, 2, 1, 5, 50, 8, 0, 0],
+  static Future<void> _sendCommand(List<int> command) async {
+    await _sendCommands([command]);
+  }
+
+  static Future<void> turnOff({bool save = true}) async {
+    await _sendCommand([0x08, 0x01, 0x0, 0x0, 0x0, 0x0, 0x0, save ? 1 : 0]);
+  }
+
+  // TODO: Is it actually exact tho? switch to the discrete levels in the code if not
+  static Future<void> setExactBrightness(num brightness,
+      {bool save = true}) async {
+    int brightnessInt = brightness.round().toInt();
+    await _sendCommand(
+        [0x08, 0x02, 0x01, 0x05, brightnessInt, 0x08, 0x00, save ? 1 : 0]);
+  }
+
+  static Future<void> setColors(List<Color> colors, {bool save = true}) async {
+    for (int i = 0; i < colors.length; i++) {
+      var color = colors[i];
+      await _sendCommand([
+        0x14,
+        0x00,
+        i + 1,
+        color.red,
+        color.green,
+        color.blue,
+        0x00,
+        save ? 1 : 0
+      ]);
+    }
+  }
+
+  static Future<void> _changeMode(int modeNumber,
+      {required bool save,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _sendCommand([
+      0x08,
+      0x02,
+      modeNumber,
+      speed,
+      brightness,
+      0x08,
+      direction,
+      save ? 1 : 0,
     ]);
+  }
+
+  static Future<void> rainbow(
+      {bool save = true,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _changeMode(0x05,
+        save: save, speed: speed, brightness: brightness, direction: direction);
+  }
+
+  static Future<void> waving(
+      {bool save = true,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _changeMode(0x03,
+        save: save, speed: speed, brightness: brightness, direction: direction);
+  }
+
+  static Future<void> breathing(
+      {bool save = true,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _changeMode(0x02,
+        save: save, speed: speed, brightness: brightness, direction: direction);
+  }
+
+  static Future<void> flash(
+      {bool save = true,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _changeMode(0x12,
+        save: save, speed: speed, brightness: brightness, direction: direction);
+  }
+
+  static Future<void> mix(
+      {bool save = true,
+      required int speed,
+      required int brightness,
+      required int direction}) async {
+    await _changeMode(0x13,
+        save: save, speed: speed, brightness: brightness, direction: direction);
   }
 }
