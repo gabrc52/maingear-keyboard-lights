@@ -1,35 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:maingear_keyboard_lights/models/constants.dart';
 import 'package:maingear_keyboard_lights/models/light_control.dart';
 
 enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
 
 class AppState extends ChangeNotifier {
-  final box = Hive.box('config');
+  final box = Hive.box('rgb-kbd-config');
 
   Future<void> applyKeyboardMode() async {
-    switch (keyboardMode) {
+    switch (mode) {
       case KeyboardMode.singleColor:
       case KeyboardMode.multiColor:
-        await KeyboardLightControl.multiColor(
+        await LightControl.multiColor(
             speed: speed, brightness: brightness, direction: direction);
         break;
       case KeyboardMode.wave:
-        await KeyboardLightControl.wave(
+        await LightControl.wave(
             speed: speed, brightness: brightness, direction: direction);
         break;
       case KeyboardMode.breathing:
-        await KeyboardLightControl.breathing(
+        await LightControl.breathing(
             speed: speed, brightness: brightness, direction: direction);
         break;
       case KeyboardMode.flash:
-        await KeyboardLightControl.flash(
+        await LightControl.flash(
             speed: speed, brightness: brightness, direction: direction);
         break;
       case KeyboardMode.mix:
-        await KeyboardLightControl.mix(
+        await LightControl.mix(
             speed: speed, brightness: brightness, direction: direction);
         break;
     }
@@ -42,7 +40,7 @@ class AppState extends ChangeNotifier {
     applyKeyboardMode();
   }
 
-  KeyboardMode get keyboardMode => KeyboardMode.values[selectedIndex];
+  KeyboardMode get mode => KeyboardMode.values[selectedIndex];
 
   double get brightness => box.get('brightness', defaultValue: 25.0);
   set brightness(double val) {
@@ -51,7 +49,6 @@ class AppState extends ChangeNotifier {
     applyKeyboardMode();
   }
 
-  /// TODO: implement changing speed
   int get speed => box.get('speed', defaultValue: 7);
   set speed(int val) {
     box.put('speed', val);
@@ -63,23 +60,55 @@ class AppState extends ChangeNotifier {
   int direction = 1;
 
   int getNumColors() {
-    if (keyboardMode == KeyboardMode.singleColor) {
+    if (mode == KeyboardMode.singleColor) {
       return 1;
-    } else if (keyboardMode == KeyboardMode.multiColor) {
+    } else if (mode == KeyboardMode.multiColor) {
       return 4;
     } else {
       return 7;
     }
   }
 
-  /// TODO: implement changing color(s)
-  List<Color> get colors => [
-        Colors.red,
-        Colors.orange,
-        Colors.yellow,
-        Colors.green,
-        Colors.blue,
-        Colors.indigo,
-        Colors.purple
-      ].sublist(0, getNumColors());
+  List<Color> get colors {
+    if (mode == KeyboardMode.singleColor) {
+      return box.get('color', defaultValue: [Colors.green.shade500]);
+    } else if (mode == KeyboardMode.multiColor) {
+      return box.get('4-colors', defaultValue: [
+        Colors.red.shade500,
+        Colors.green.shade500,
+        Colors.blue.shade500,
+        Colors.purple.shade500,
+      ]);
+    } else {
+      return box.get('7-colors', defaultValue: [
+        Colors.red.shade500,
+        Colors.orange.shade500,
+        Colors.yellow.shade500,
+        Colors.green.shade500,
+        Colors.blue.shade500,
+        Colors.indigo.shade500,
+        Colors.purple.shade500,
+      ]);
+    }
+  }
+
+  /// TODO: actually send command
+  set colors(List<Color> colors) {
+    assert(colors.length == getNumColors());
+    if (mode == KeyboardMode.singleColor) {
+      box.put('color', colors);
+    } else if (mode == KeyboardMode.multiColor) {
+      box.put('4-colors', colors);
+    } else {
+      box.put('7-colors', colors);
+    }
+    notifyListeners();
+    LightControl.setColors(colors);
+  }
+
+  void setColor(int index, Color value) {
+    var tmp = [...colors];
+    tmp[index] = value;
+    colors = tmp;
+  }
 }

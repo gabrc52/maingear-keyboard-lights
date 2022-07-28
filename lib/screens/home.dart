@@ -49,8 +49,8 @@ class HomePage extends StatelessWidget {
           children: [
             const AppNavigationBar(),
             const Divider(),
-            if (state.keyboardMode != KeyboardMode.multiColor &&
-                state.keyboardMode != KeyboardMode.singleColor) ...const [
+            if (state.mode != KeyboardMode.multiColor &&
+                state.mode != KeyboardMode.singleColor) ...const [
               SpeedControl(),
               Divider()
             ],

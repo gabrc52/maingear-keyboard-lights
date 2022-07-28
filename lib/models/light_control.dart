@@ -9,8 +9,8 @@ import 'package:libusb/libusb64.dart';
 import 'package:flutter/material.dart';
 
 /// This class lets you control the keyboard lights - static methods only
-class KeyboardLightControl {
-  KeyboardLightControl._();
+class LightControl {
+  LightControl._();
 
   /// From quick_usb_desktop.dart
   static Libusb _getLibusb() {
