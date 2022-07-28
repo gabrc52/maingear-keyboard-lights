@@ -4,6 +4,10 @@ This desktop app lets you control Integrated Technology Express keyboard lights,
 
 Tested with the Maingear Vector Pro. Should work on the Avell A52 too, as the Python script this is based on is for that machine.
 
+Screenshot:
+
+![Screenshot](screenshot.png)
+
 ## Credits
 
 * https://github.com/petryx/avell-a52-lights
