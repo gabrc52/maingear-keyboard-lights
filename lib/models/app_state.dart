@@ -6,6 +6,7 @@ enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
 
 class AppState extends ChangeNotifier {
   final box = Hive.box('rgb-kbd-config');
+  final colorBox = Hive.box<List<Color>>('rgb-kbd-config-colors');
 
   Future<void> applyKeyboardMode() async {
     LightControl.setColors(colors);
@@ -72,16 +73,16 @@ class AppState extends ChangeNotifier {
 
   List<Color> get colors {
     if (mode == KeyboardMode.singleColor) {
-      return box.get('color', defaultValue: [Colors.green.shade500]);
+      return colorBox.get('color', defaultValue: [Colors.green.shade500])!;
     } else if (mode == KeyboardMode.multiColor) {
-      return box.get('4-colors', defaultValue: [
+      return colorBox.get('4-colors', defaultValue: [
         Colors.red.shade500,
         Colors.green.shade500,
         Colors.blue.shade500,
         Colors.purple.shade500,
-      ]);
+      ])!;
     } else {
-      return box.get('7-colors', defaultValue: [
+      return colorBox.get('7-colors', defaultValue: [
         Colors.red.shade500,
         Colors.orange.shade500,
         Colors.yellow.shade500,
@@ -89,7 +90,7 @@ class AppState extends ChangeNotifier {
         Colors.blue.shade500,
         Colors.indigo.shade500,
         Colors.purple.shade500,
-      ]);
+      ])!;
     }
   }
 
@@ -97,17 +98,19 @@ class AppState extends ChangeNotifier {
   set colors(List<Color> colors) {
     assert(colors.length == getNumColors());
     if (mode == KeyboardMode.singleColor) {
-      box.put('color', colors);
+      colorBox.put('color', colors);
     } else if (mode == KeyboardMode.multiColor) {
-      box.put('4-colors', colors);
+      colorBox.put('4-colors', colors);
     } else {
-      box.put('7-colors', colors);
+      colorBox.put('7-colors', colors);
     }
     notifyListeners();
     LightControl.setColors(colors);
   }
 
-  void setColor(int index, Color value) {
+  Future<void> setColor(int index, Color value) async {
+    LightControl.setColor(index, value);
+    notifyListeners();
     var tmp = [...colors];
     tmp[index] = value;
     colors = tmp;
