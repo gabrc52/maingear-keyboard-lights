@@ -108,33 +108,34 @@ class KeyboardLightControl {
   static Future<void> _changeMode(int modeNumber,
       {required bool save,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
+    int brightnessInt = brightness.round().toInt();
     await _sendCommand([
       0x08,
       0x02,
       modeNumber,
       speed,
-      brightness,
+      brightnessInt,
       0x08,
       direction,
       save ? 1 : 0,
     ]);
   }
 
-  static Future<void> rainbow(
+  static Future<void> multiColor(
       {bool save = true,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
     await _changeMode(0x05,
         save: save, speed: speed, brightness: brightness, direction: direction);
   }
 
-  static Future<void> waving(
+  static Future<void> wave(
       {bool save = true,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
     await _changeMode(0x03,
         save: save, speed: speed, brightness: brightness, direction: direction);
@@ -143,7 +144,7 @@ class KeyboardLightControl {
   static Future<void> breathing(
       {bool save = true,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
     await _changeMode(0x02,
         save: save, speed: speed, brightness: brightness, direction: direction);
@@ -152,7 +153,7 @@ class KeyboardLightControl {
   static Future<void> flash(
       {bool save = true,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
     await _changeMode(0x12,
         save: save, speed: speed, brightness: brightness, direction: direction);
@@ -161,7 +162,7 @@ class KeyboardLightControl {
   static Future<void> mix(
       {bool save = true,
       required int speed,
-      required int brightness,
+      required num brightness,
       required int direction}) async {
     await _changeMode(0x13,
         save: save, speed: speed, brightness: brightness, direction: direction);

@@ -52,12 +52,7 @@ class HomePage extends StatelessWidget {
           Consumer<AppState>(
             builder: (context, state, _) => ColorsSelector(
               numColors: state.getNumColors(),
-              colors: const [
-                Colors.red,
-                Colors.green,
-                Colors.blue,
-                Colors.purple,
-              ],
+              colors: state.colors,
             ),
           ),
           const Divider(),
