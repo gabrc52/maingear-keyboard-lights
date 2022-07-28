@@ -44,22 +44,22 @@ class HomePage extends StatelessWidget {
           },
         )
       ],
-      body: Column(
-        children: [
-          const AppNavigationBar(),
-          const Divider(),
-          const BrightnessControl(),
-          const Divider(),
-          const SpeedControl(),
-          const Divider(),
-          Consumer<AppState>(
-            builder: (context, state, _) => ColorsSelector(
-              numColors: state.getNumColors(),
-              colors: state.colors,
-            ),
-          ),
-          const Divider(),
-        ],
+      body: Consumer<AppState>(
+        builder: (context, state, _) => Column(
+          children: [
+            const AppNavigationBar(),
+            const Divider(),
+            if (state.keyboardMode != KeyboardMode.multiColor &&
+                state.keyboardMode != KeyboardMode.singleColor) ...const [
+              SpeedControl(),
+              Divider()
+            ],
+            const BrightnessControl(),
+            const Divider(),
+            const ColorsSelector(),
+            const Divider(),
+          ],
+        ),
       ),
     );
   }
