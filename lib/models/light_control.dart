@@ -44,7 +44,9 @@ class LightControl {
 
     /// Detach kernel driver. This is done in the Python script
     if (Platform.isLinux) {
-      libusb.libusb_set_auto_detach_kernel_driver(devicePtr, 1);
+      if (libusb.libusb_kernel_driver_active(devicePtr, 1) == 1) {
+        libusb.libusb_detach_kernel_driver(devicePtr, 1);
+      }
     }
 
     for (var command in commands) {
