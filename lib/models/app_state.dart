@@ -4,7 +4,7 @@ import 'package:maingear_keyboard_lights/models/light_control.dart';
 
 import 'constants.dart';
 
-enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
+enum KeyboardMode { singleColor, multiColor, wave, flash, breathing, mix }
 
 enum ColorMode { custom, classic, material }
 
