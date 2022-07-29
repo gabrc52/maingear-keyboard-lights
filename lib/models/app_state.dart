@@ -6,10 +6,8 @@ enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
 
 class AppState extends ChangeNotifier {
   final box = Hive.box('rgb-kbd-config');
-  final colorBox = Hive.box<List<Color>>('rgb-kbd-config-colors');
 
   Future<void> applyKeyboardMode() async {
-    LightControl.setColors(colors);
     switch (mode) {
       case KeyboardMode.singleColor:
       case KeyboardMode.multiColor:
@@ -40,6 +38,7 @@ class AppState extends ChangeNotifier {
     box.put('selectedIndex', val);
     notifyListeners();
     applyKeyboardMode();
+    LightControl.setColors(colors);
   }
 
   KeyboardMode get mode => KeyboardMode.values[selectedIndex];
@@ -73,39 +72,42 @@ class AppState extends ChangeNotifier {
 
   List<Color> get colors {
     if (mode == KeyboardMode.singleColor) {
-      return colorBox.get('color', defaultValue: [Colors.green.shade500])!;
+      return box.get('color')?.map<Color>((e) => Color(e)).toList() ??
+          [Colors.green.shade500];
     } else if (mode == KeyboardMode.multiColor) {
-      return colorBox.get('4-colors', defaultValue: [
-        Colors.red.shade500,
-        Colors.green.shade500,
-        Colors.blue.shade500,
-        Colors.purple.shade500,
-      ])!;
+      return box.get('4-colors')?.map<Color>((e) => Color(e)).toList() ??
+          [
+            Colors.red.shade500,
+            Colors.green.shade500,
+            Colors.blue.shade500,
+            Colors.purple.shade500,
+          ];
     } else {
-      return colorBox.get('7-colors', defaultValue: [
-        Colors.red.shade500,
-        Colors.orange.shade500,
-        Colors.yellow.shade500,
-        Colors.green.shade500,
-        Colors.blue.shade500,
-        Colors.indigo.shade500,
-        Colors.purple.shade500,
-      ])!;
+      return box.get('7-colors')?.map<Color>((e) => Color(e)).toList() ??
+          [
+            Colors.red.shade500,
+            Colors.orange.shade500,
+            Colors.yellow.shade500,
+            Colors.green.shade500,
+            Colors.blue.shade500,
+            Colors.indigo.shade500,
+            Colors.purple.shade500,
+          ];
     }
   }
 
-  /// TODO: actually send command
+  /// Saves colors to Hive. This doesn't update them in the keyboard
   set colors(List<Color> colors) {
+    List<int> colorsInt = colors.map((e) => e.value).toList();
     assert(colors.length == getNumColors());
     if (mode == KeyboardMode.singleColor) {
-      colorBox.put('color', colors);
+      box.put('color', colorsInt);
     } else if (mode == KeyboardMode.multiColor) {
-      colorBox.put('4-colors', colors);
+      box.put('4-colors', colorsInt);
     } else {
-      colorBox.put('7-colors', colors);
+      box.put('7-colors', colorsInt);
     }
     notifyListeners();
-    LightControl.setColors(colors);
   }
 
   Future<void> setColor(int index, Color value) async {
