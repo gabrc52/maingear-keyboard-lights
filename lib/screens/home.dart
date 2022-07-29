@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
           onPressed: () async {
             showAboutDialog(
               context: context,
-              applicationVersion: 'Control RGB keyboard lights (beta)',
+              applicationVersion: 'Control RGB keyboard lights',
               applicationIcon: const CircleAvatar(
                 backgroundColor: Colors.orange,
                 child: Icon(Icons.keyboard_alt_outlined),
