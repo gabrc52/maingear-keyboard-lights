@@ -9,6 +9,11 @@ enum ColorMode { custom, classic, material }
 class AppState extends ChangeNotifier {
   final box = Hive.box('rgb-kbd-config');
 
+  Future<void> turnOn() async {
+    applyKeyboardMode();
+    LightControl.setColors(colors);
+  }
+
   Future<void> applyKeyboardMode() async {
     switch (mode) {
       case KeyboardMode.singleColor:

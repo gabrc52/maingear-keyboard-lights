@@ -1,4 +1,3 @@
-import 'package:adwaita/adwaita.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maingear_keyboard_lights/models/constants.dart';

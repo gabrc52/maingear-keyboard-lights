@@ -41,6 +41,7 @@ class MaingearColors {
   static const white = Color(0xffffffff);
   static const yellow = Color(0xffffff00);
   static const orange = Color(0xffff8000);
+  static const black = Color(0xff000000);
 
   static const allColors = [
     MaingearColors.white,
@@ -58,6 +59,7 @@ class MaingearColors {
     MaingearColors.navy,
     MaingearColors.fuchsia,
     MaingearColors.purple,
+    MaingearColors.black,
   ];
 }
 

@@ -4,6 +4,7 @@ import 'package:maingear_keyboard_lights/models/constants.dart';
 // import 'package:maingear_keyboard_lights/models/light_control.dart';
 // import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:maingear_keyboard_lights/models/light_control.dart';
 import 'package:maingear_keyboard_lights/widgets/brightness_control.dart';
 import 'package:maingear_keyboard_lights/widgets/colors_selector.dart';
 import 'package:maingear_keyboard_lights/widgets/navigation_bar.dart';
@@ -18,6 +19,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       persistentFooterButtons: [
+        TextButton.icon(
+          icon: const Icon(Icons.power),
+          label: const Text('Turn on'),
+          onPressed: () =>
+              Provider.of<AppState>(context, listen: false).turnOn(),
+        ),
+        TextButton.icon(
+          icon: const Icon(Icons.power_off),
+          label: const Text('Turn off'),
+          onPressed: LightControl.turnOff,
+        ),
         TextButton.icon(
           icon: const Icon(Icons.info_outline),
           label: const Text('About'),
