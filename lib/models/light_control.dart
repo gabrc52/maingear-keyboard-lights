@@ -28,8 +28,9 @@ class LightControl {
 
   // I swear the actual C code looks simpler than dart:ffi code - I've written it
   static Future<void> _sendCommands(List<List<int>> commands) async {
-    // TODO: it would be best to extract initialization and deinitialization?
+    // it would be best to extract initialization and deinitialization?
     // Libusb can still be static
+    // meh, this works.
 
     final libusb = _getLibusb();
 
@@ -81,9 +82,7 @@ class LightControl {
     await _sendCommand([0x08, 0x01, 0x0, 0x0, 0x0, 0x0, 0x0, save ? 1 : 0]);
   }
 
-  // TODO: Is it actually exact tho? switch to the discrete levels in the code if not
-  static Future<void> setExactBrightness(num brightness,
-      {bool save = true}) async {
+  static Future<void> setBrightness(num brightness, {bool save = true}) async {
     int brightnessInt = brightness.round().toInt();
     await _sendCommand(
         [0x08, 0x02, 0x01, 0x05, brightnessInt, 0x08, 0x00, save ? 1 : 0]);

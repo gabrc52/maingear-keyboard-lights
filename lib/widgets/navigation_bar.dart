@@ -35,12 +35,12 @@ class AppNavigationBar extends StatelessWidget {
             label: 'Wave',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.hurricane),
-            label: 'Breathing',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.flash_on),
             label: 'Flash',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.hurricane),
+            label: 'Breathing',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.mix),

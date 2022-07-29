@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maingear_keyboard_lights/models/light_control.dart';
 import 'package:maingear_keyboard_lights/widgets/brightness_control.dart';
 import 'package:maingear_keyboard_lights/widgets/colors_selector.dart';
+import 'package:maingear_keyboard_lights/widgets/direction_control.dart';
 import 'package:maingear_keyboard_lights/widgets/navigation_bar.dart';
 import 'package:maingear_keyboard_lights/widgets/speed_control.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class HomePage extends StatelessWidget {
           onPressed: () async {
             showAboutDialog(
               context: context,
-              applicationVersion: 'Control RGB keyboard lights',
+              applicationVersion: 'Control RGB keyboard lights (beta)',
               applicationIcon: const CircleAvatar(
                 backgroundColor: Colors.orange,
                 child: Icon(Icons.keyboard_alt_outlined),
@@ -61,15 +62,20 @@ class HomePage extends StatelessWidget {
           children: [
             const AppNavigationBar(),
             const Divider(),
+            const BrightnessControl(),
+            const Divider(),
             if (state.mode != KeyboardMode.multiColor &&
                 state.mode != KeyboardMode.singleColor) ...const [
               SpeedControl(),
-              Divider()
+              Divider(),
             ],
-            const BrightnessControl(),
-            const Divider(),
             const ColorsSelector(),
             const Divider(),
+            if (state.mode == KeyboardMode.wave ||
+                state.mode == KeyboardMode.flash) ...const [
+              DirectionControl(),
+              Divider(),
+            ],
           ],
         ),
       ),

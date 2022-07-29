@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:maingear_keyboard_lights/models/light_control.dart';
 
+import 'constants.dart';
+
 enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
 
 enum ColorMode { custom, classic, material }
@@ -64,8 +66,14 @@ class AppState extends ChangeNotifier {
     applyKeyboardMode();
   }
 
-  /// TODO: implement changing direction
-  int direction = 1;
+  int get direction =>
+      box.get('direction', defaultValue: Directions.leftToRight);
+
+  set direction(int val) {
+    box.put('direction', val);
+    notifyListeners();
+    applyKeyboardMode();
+  }
 
   int getNumColors() {
     if (mode == KeyboardMode.singleColor) {
