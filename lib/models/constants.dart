@@ -41,6 +41,24 @@ class MaingearColors {
   static const white = Color(0xffffffff);
   static const yellow = Color(0xffffff00);
   static const orange = Color(0xffff8000);
+
+  static const allColors = [
+    MaingearColors.white,
+    MaingearColors.silver,
+    MaingearColors.maroon,
+    MaingearColors.red,
+    MaingearColors.orange,
+    MaingearColors.olive,
+    MaingearColors.yellow,
+    MaingearColors.green,
+    MaingearColors.lime,
+    MaingearColors.teal,
+    MaingearColors.aqua,
+    MaingearColors.blue,
+    MaingearColors.navy,
+    MaingearColors.fuchsia,
+    MaingearColors.purple,
+  ];
 }
 
 class KeyboardBrightness {

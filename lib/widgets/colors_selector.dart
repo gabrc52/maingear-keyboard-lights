@@ -1,4 +1,7 @@
+import 'package:adwaita/adwaita.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:maingear_keyboard_lights/models/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -38,11 +41,7 @@ class ColorsSelector extends StatelessWidget {
                         builder: (context) => AlertDialog(
                           title: const Text('Pick a color!'),
                           content: SingleChildScrollView(
-                            // or Material, Block, MultipleChoiceBlock
-                            child: ColorPicker(
-                              pickerColor: state.colors[i],
-                              onColorChanged: (val) => state.setColor(i, val),
-                            ),
+                            child: ChoosableColorPicker(i: i),
                           ),
                           actions: <Widget>[
                             ElevatedButton(
@@ -63,6 +62,71 @@ class ColorsSelector extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class ChoosableColorPicker extends StatelessWidget {
+  const ChoosableColorPicker({
+    Key? key,
+    required this.i,
+  }) : super(key: key);
+
+  final int i;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AppState>(
+      builder: (context, state, _) => Column(
+        children: [
+          CupertinoSlidingSegmentedControl<ColorMode>(
+            children: const {
+              ColorMode.custom: Text('Custom'),
+              ColorMode.classic: Text('Classic'),
+              ColorMode.material: Text('Material'),
+            },
+            groupValue: state.colorMode,
+            onValueChanged: (val) {
+              if (val != null) {
+                state.colorMode = val;
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          if (state.colorMode == ColorMode.custom)
+            ColorPicker(
+              enableAlpha: false,
+              hexInputBar: true,
+              pickerColor: state.colors[i],
+              onColorChanged: (val) => state.setColor(i, val),
+            ),
+          if (state.colorMode == ColorMode.classic)
+            BlockPicker(
+              pickerColor: state.colors[i],
+              onColorChanged: (val) => state.setColor(i, val),
+              availableColors: MaingearColors.allColors,
+            ),
+          if (state.colorMode == ColorMode.material) ...[
+            SwitchListTile(
+              title: const Text('Show shades'),
+              value: state.showMaterialShades,
+              onChanged: (val) => state.showMaterialShades = val,
+            ),
+            if (state.showMaterialShades)
+              MaterialPicker(
+                pickerColor: state.colors[i],
+                onColorChanged: (val) => state.setColor(i, val),
+                onPrimaryChanged: (val) => state.setColor(i, val),
+                enableLabel: true,
+              )
+            else
+              BlockPicker(
+                pickerColor: state.colors[i],
+                onColorChanged: (val) => state.setColor(i, val),
+              ),
+          ],
+        ],
+      ),
     );
   }
 }

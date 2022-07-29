@@ -4,6 +4,8 @@ import 'package:maingear_keyboard_lights/models/light_control.dart';
 
 enum KeyboardMode { singleColor, multiColor, wave, breathing, flash, mix }
 
+enum ColorMode { custom, classic, material }
+
 class AppState extends ChangeNotifier {
   final box = Hive.box('rgb-kbd-config');
 
@@ -116,5 +118,33 @@ class AppState extends ChangeNotifier {
     var tmp = [...colors];
     tmp[index] = value;
     colors = tmp;
+  }
+
+  ColorMode get colorMode {
+    int? modeInt = box.get('color-mode');
+    if (modeInt == null) {
+      return ColorMode.custom;
+    } else {
+      return ColorMode.values[modeInt];
+    }
+  }
+
+  set colorMode(ColorMode val) {
+    for (int i = 0; i < ColorMode.values.length; i++) {
+      if (val == ColorMode.values[i]) {
+        box.put('color-mode', i);
+        notifyListeners();
+        return;
+      }
+    }
+  }
+
+  /// whether to show shades of the colors in the material color picker
+  bool get showMaterialShades =>
+      box.get('show-material-shades', defaultValue: true);
+
+  set showMaterialShades(bool val) {
+    box.put('show-material-shades', val);
+    notifyListeners();
   }
 }
